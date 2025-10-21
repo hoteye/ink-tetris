@@ -1,5 +1,9 @@
 # Ink Tetris
 
+[![npm version](https://badge.fury.io/js/ink-tetris.svg)](https://badge.fury.io/js/ink-tetris)
+[![npm downloads](https://img.shields.io/npm/dm/ink-tetris.svg)](https://www.npmjs.com/package/ink-tetris)
+[![license](https://img.shields.io/npm/l/ink-tetris.svg)](https://github.com/hoteye/ink-tetris/blob/master/LICENSE)
+
 A terminal-based Tetris game built with [Ink](https://github.com/vadimdemedes/ink).
 
 ## Installation
