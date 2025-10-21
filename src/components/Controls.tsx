@@ -25,42 +25,42 @@ export const Controls: React.FC<ControlsProps> = ({ shouldBlink = false }) => {
   }, [shouldBlink]);
 
   return (
-    <Box flexDirection="column" borderStyle="round" borderColor="blue" padding={1}>
+    <Box flexDirection="column" borderStyle="round" borderColor="blue" padding={1} width={22}>
       <Box marginBottom={1}>
         <Text bold color="cyan">
           {t(language, 'controls')}
         </Text>
       </Box>
       <Box flexDirection="column">
-        <Text dimColor>
+        <Text dimColor wrap="truncate">
           <Text color="yellow">{t(language, 'leftRight')}</Text> : {t(language, 'move')}
         </Text>
-        <Text dimColor>
+        <Text dimColor wrap="truncate">
           <Text color="yellow">{t(language, 'up')}</Text> : {t(language, 'rotate')}
         </Text>
-        <Text dimColor>
+        <Text dimColor wrap="truncate">
           <Text color="yellow">{t(language, 'down')}</Text> : {t(language, 'softDrop')}
         </Text>
-        <Text dimColor>
+        <Text dimColor wrap="truncate">
           <Text color="yellow">{t(language, 'space')}</Text> : {t(language, 'hardDrop')}
         </Text>
-        <Text dimColor>
+        <Text dimColor wrap="truncate">
           <Text color="yellow">{t(language, 'p')}</Text>   : {t(language, 'pause')}
         </Text>
         {shouldBlink && showBlink ? (
-          <Text bold color="yellow" backgroundColor="red">
+          <Text bold color="yellow" backgroundColor="red" wrap="truncate">
             <Text color="yellow">{t(language, 'r')}</Text>   : {t(language, 'restart')}
           </Text>
         ) : (
-          <Text dimColor>
+          <Text dimColor wrap="truncate">
             <Text color="yellow">{t(language, 'r')}</Text>   : {t(language, 'restart')}
           </Text>
         )}
-        <Text dimColor>
+        <Text dimColor wrap="truncate">
           <Text color="yellow">{t(language, 'q')}</Text>   : {t(language, 'quit')}
         </Text>
         <Box marginTop={1}>
-          <Text dimColor>
+          <Text dimColor wrap="truncate">
             <Text color="green">{t(language, 'l')}</Text>   : {t(language, 'language')}
           </Text>
         </Box>
