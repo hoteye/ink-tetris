@@ -4,7 +4,27 @@ A terminal-based Tetris game built with [Ink](https://github.com/vadimdemedes/in
 
 ## Installation
 
+### Via npm (Recommended)
+
 ```bash
+# Global install
+npm install -g ink-tetris
+
+# Run anywhere
+ink-tetris
+```
+
+### Or run directly with npx
+
+```bash
+npx ink-tetris
+```
+
+### From source
+
+```bash
+git clone https://github.com/hoteye/ink-tetris.git
+cd ink-tetris
 npm install
 npm run build
 npm start
