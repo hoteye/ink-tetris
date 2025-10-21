@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Box, Text } from 'ink';
 import { blockShape, blockColors } from '../core/constants.js';
+import { I18nContext } from '../i18n/I18nContext.js';
+import { t } from '../i18n/languages.js';
 export const NextBlock = ({ nextBlockType }) => {
+    const { language } = useContext(I18nContext);
     const shape = blockShape[nextBlockType];
     const color = blockColors[nextBlockType];
     if (!shape) {
@@ -11,7 +14,7 @@ export const NextBlock = ({ nextBlockType }) => {
     const CONTENT_WIDTH = 5; // 5 个方块位置
     return (React.createElement(Box, { flexDirection: "column", borderStyle: "round", borderColor: "cyan", paddingX: 1, paddingY: 1 },
         React.createElement(Box, { marginBottom: 1 },
-            React.createElement(Text, { bold: true, color: "cyan" }, "NEXT")),
+            React.createElement(Text, { bold: true, color: "cyan" }, t(language, 'next'))),
         shape.map((row, y) => {
             // 计算左右填充以居中显示
             const blockWidth = row.length;

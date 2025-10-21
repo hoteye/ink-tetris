@@ -1,15 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Text, useInput, useApp } from 'ink';
 import { useGameState } from './core/useGameState.js';
 import { GameBoard } from './components/GameBoard.js';
 import { NextBlock } from './components/NextBlock.js';
 import { GameInfo } from './components/GameInfo.js';
 import { Controls } from './components/Controls.js';
+import { I18nContext } from './i18n/I18nContext.js';
+import { languages, t } from './i18n/languages.js';
 const App = () => {
     const { exit } = useApp();
     const { state, startGame, togglePause, moveBlock, hardDrop } = useGameState();
+    const [language, setLanguage] = useState('en');
     // 键盘控制
     useInput((input, key) => {
+        // 切换语言
+        if (input === 'l' || input === 'L') {
+            setLanguage((prev) => {
+                const langs = ['en', 'zh', 'ja', 'ko', 'fr', 'es'];
+                const currentIndex = langs.indexOf(prev);
+                return langs[(currentIndex + 1) % langs.length];
+            });
+            return;
+        }
         // 退出
         if (input === 'q' || input === 'Q') {
             exit();
@@ -59,17 +71,23 @@ const App = () => {
             return () => clearTimeout(timer);
         }
     }, [state.isStarted, startGame]);
-    return (React.createElement(Box, { flexDirection: "column", padding: 1, alignItems: "center" },
-        React.createElement(Box, { marginBottom: 1 },
-            React.createElement(Text, { bold: true, color: "cyan" }, "TETRIS - INK VERSION")),
-        React.createElement(Box, null,
-            React.createElement(Box, { marginRight: 2 },
-                React.createElement(GameBoard, { matrix: state.matrix, currentBlock: state.currentBlock })),
-            React.createElement(Box, { flexDirection: "column", marginRight: 2 },
-                React.createElement(Box, { marginBottom: 2 },
-                    React.createElement(NextBlock, { nextBlockType: state.nextBlockType })),
-                React.createElement(GameInfo, { score: state.score, lines: state.lines, level: state.speedLevel, isPaused: state.isPaused, isGameOver: state.isGameOver })),
+    return (React.createElement(I18nContext.Provider, { value: { language, setLanguage } },
+        React.createElement(Box, { flexDirection: "column", padding: 1, alignItems: "center" },
+            React.createElement(Box, { marginBottom: 1, justifyContent: "center", width: 50 },
+                React.createElement(Box, { marginRight: 2 },
+                    React.createElement(Text, { bold: true, color: "cyan" }, t(language, 'title'))),
+                React.createElement(Text, { dimColor: true, color: "gray", wrap: "truncate" },
+                    "(",
+                    languages[language],
+                    ")")),
             React.createElement(Box, null,
-                React.createElement(Controls, { shouldBlink: !state.isStarted || state.isGameOver })))));
+                React.createElement(Box, { marginRight: 2 },
+                    React.createElement(GameBoard, { matrix: state.matrix, currentBlock: state.currentBlock })),
+                React.createElement(Box, { flexDirection: "column", marginRight: 2 },
+                    React.createElement(Box, { marginBottom: 2 },
+                        React.createElement(NextBlock, { nextBlockType: state.nextBlockType })),
+                    React.createElement(GameInfo, { score: state.score, lines: state.lines, level: state.speedLevel, isPaused: state.isPaused, isGameOver: state.isGameOver })),
+                React.createElement(Box, null,
+                    React.createElement(Controls, { shouldBlink: !state.isStarted || state.isGameOver }))))));
 };
 export default App;

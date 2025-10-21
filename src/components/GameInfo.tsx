@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Box, Text } from 'ink';
+import { I18nContext } from '../i18n/I18nContext.js';
+import { t } from '../i18n/languages.js';
 
 interface GameInfoProps {
   score: number;
@@ -16,25 +18,26 @@ export const GameInfo: React.FC<GameInfoProps> = ({
   isPaused,
   isGameOver,
 }) => {
+  const { language } = useContext(I18nContext);
   return (
     <Box flexDirection="column">
       <Box marginBottom={1} flexDirection="column">
         <Text bold color="yellow">
-          SCORE
+          {t(language, 'score')}
         </Text>
         <Text color="white">{score.toString().padStart(6, '0')}</Text>
       </Box>
 
       <Box marginBottom={1} flexDirection="column">
         <Text bold color="green">
-          LINES
+          {t(language, 'lines')}
         </Text>
         <Text color="white">{lines}</Text>
       </Box>
 
       <Box marginBottom={1} flexDirection="column">
         <Text bold color="magenta">
-          LEVEL
+          {t(language, 'level')}
         </Text>
         <Text color="white">{level}</Text>
       </Box>
@@ -42,7 +45,7 @@ export const GameInfo: React.FC<GameInfoProps> = ({
       {isPaused && (
         <Box marginTop={1} borderStyle="round" borderColor="yellow" padding={1}>
           <Text bold color="yellow">
-            PAUSED
+            {t(language, 'paused')}
           </Text>
         </Box>
       )}

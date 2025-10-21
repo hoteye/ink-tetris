@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Box, Text } from 'ink';
+import { I18nContext } from '../i18n/I18nContext.js';
+import { t } from '../i18n/languages.js';
 export const Controls = ({ shouldBlink = false }) => {
+    const { language } = useContext(I18nContext);
     const [showBlink, setShowBlink] = useState(true);
     useEffect(() => {
         if (!shouldBlink) {
@@ -14,29 +17,42 @@ export const Controls = ({ shouldBlink = false }) => {
     }, [shouldBlink]);
     return (React.createElement(Box, { flexDirection: "column", borderStyle: "round", borderColor: "blue", padding: 1 },
         React.createElement(Box, { marginBottom: 1 },
-            React.createElement(Text, { bold: true, color: "cyan" }, "CONTROLS")),
+            React.createElement(Text, { bold: true, color: "cyan" }, t(language, 'controls'))),
         React.createElement(Box, { flexDirection: "column" },
             React.createElement(Text, { dimColor: true },
-                React.createElement(Text, { color: "yellow" }, "\u2190/\u2192"),
-                " : Move"),
+                React.createElement(Text, { color: "yellow" }, t(language, 'leftRight')),
+                " : ",
+                t(language, 'move')),
             React.createElement(Text, { dimColor: true },
-                React.createElement(Text, { color: "yellow" }, "\u2191"),
-                "   : Rotate"),
+                React.createElement(Text, { color: "yellow" }, t(language, 'up')),
+                " : ",
+                t(language, 'rotate')),
             React.createElement(Text, { dimColor: true },
-                React.createElement(Text, { color: "yellow" }, "\u2193"),
-                "   : Soft Drop"),
+                React.createElement(Text, { color: "yellow" }, t(language, 'down')),
+                " : ",
+                t(language, 'softDrop')),
             React.createElement(Text, { dimColor: true },
-                React.createElement(Text, { color: "yellow" }, "Space"),
-                " : Hard Drop"),
+                React.createElement(Text, { color: "yellow" }, t(language, 'space')),
+                " : ",
+                t(language, 'hardDrop')),
             React.createElement(Text, { dimColor: true },
-                React.createElement(Text, { color: "yellow" }, "P"),
-                "   : Pause"),
+                React.createElement(Text, { color: "yellow" }, t(language, 'p')),
+                "   : ",
+                t(language, 'pause')),
             shouldBlink && showBlink ? (React.createElement(Text, { bold: true, color: "yellow", backgroundColor: "red" },
-                React.createElement(Text, { color: "yellow" }, "R"),
-                "   : Restart/Start")) : (React.createElement(Text, { dimColor: true },
-                React.createElement(Text, { color: "yellow" }, "R"),
-                "   : Restart/Start")),
+                React.createElement(Text, { color: "yellow" }, t(language, 'r')),
+                "   : ",
+                t(language, 'restart'))) : (React.createElement(Text, { dimColor: true },
+                React.createElement(Text, { color: "yellow" }, t(language, 'r')),
+                "   : ",
+                t(language, 'restart'))),
             React.createElement(Text, { dimColor: true },
-                React.createElement(Text, { color: "yellow" }, "Q"),
-                "   : Quit"))));
+                React.createElement(Text, { color: "yellow" }, t(language, 'q')),
+                "   : ",
+                t(language, 'quit')),
+            React.createElement(Box, { marginTop: 1 },
+                React.createElement(Text, { dimColor: true },
+                    React.createElement(Text, { color: "green" }, t(language, 'l')),
+                    "   : ",
+                    t(language, 'language'))))));
 };

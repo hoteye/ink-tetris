@@ -1,17 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Text, useInput, useApp } from 'ink';
 import { useGameState } from './core/useGameState.js';
 import { GameBoard } from './components/GameBoard.js';
 import { NextBlock } from './components/NextBlock.js';
 import { GameInfo } from './components/GameInfo.js';
 import { Controls } from './components/Controls.js';
+import { I18nContext } from './i18n/I18nContext.js';
+import { Language, languages, t } from './i18n/languages.js';
 
 const App: React.FC = () => {
   const { exit } = useApp();
   const { state, startGame, togglePause, moveBlock, hardDrop } = useGameState();
+  const [language, setLanguage] = useState<Language>('en');
 
   // 键盘控制
   useInput((input, key) => {
+    // 切换语言
+    if (input === 'l' || input === 'L') {
+      setLanguage((prev) => {
+        const langs: Language[] = ['en', 'zh', 'ja', 'ko', 'fr', 'es'];
+        const currentIndex = langs.indexOf(prev);
+        return langs[(currentIndex + 1) % langs.length];
+      });
+      return;
+    }
+
     // 退出
     if (input === 'q' || input === 'Q') {
       exit();
@@ -65,44 +78,51 @@ const App: React.FC = () => {
   }, [state.isStarted, startGame]);
 
   return (
-    <Box flexDirection="column" padding={1} alignItems="center">
-      {/* 标题 */}
-      <Box marginBottom={1}>
-        <Text bold color="cyan">
-          TETRIS - INK VERSION
-        </Text>
-      </Box>
-
-      {/* 游戏区域 */}
-      <Box>
-        {/* 游戏板 */}
-        <Box marginRight={2}>
-          <GameBoard matrix={state.matrix} currentBlock={state.currentBlock} />
+    <I18nContext.Provider value={{ language, setLanguage }}>
+      <Box flexDirection="column" padding={1} alignItems="center">
+        {/* 标题和语言显示 */}
+        <Box marginBottom={1} justifyContent="center" width={50}>
+          <Box marginRight={2}>
+            <Text bold color="cyan">
+              {t(language, 'title')}
+            </Text>
+          </Box>
+          <Text dimColor color="gray" wrap="truncate">
+            ({languages[language]})
+          </Text>
         </Box>
 
-        {/* 中间栏：Next 和 Info */}
-        <Box flexDirection="column" marginRight={2}>
-          {/* 下一个方块 */}
-          <Box marginBottom={2}>
-            <NextBlock nextBlockType={state.nextBlockType} />
+        {/* 游戏区域 */}
+        <Box>
+          {/* 游戏板 */}
+          <Box marginRight={2}>
+            <GameBoard matrix={state.matrix} currentBlock={state.currentBlock} />
           </Box>
 
-          {/* 游戏信息 */}
-          <GameInfo
-            score={state.score}
-            lines={state.lines}
-            level={state.speedLevel}
-            isPaused={state.isPaused}
-            isGameOver={state.isGameOver}
-          />
-        </Box>
+          {/* 中间栏：Next 和 Info */}
+          <Box flexDirection="column" marginRight={2}>
+            {/* 下一个方块 */}
+            <Box marginBottom={2}>
+              <NextBlock nextBlockType={state.nextBlockType} />
+            </Box>
 
-        {/* 最右侧：控制说明 */}
-        <Box>
-          <Controls shouldBlink={!state.isStarted || state.isGameOver} />
+            {/* 游戏信息 */}
+            <GameInfo
+              score={state.score}
+              lines={state.lines}
+              level={state.speedLevel}
+              isPaused={state.isPaused}
+              isGameOver={state.isGameOver}
+            />
+          </Box>
+
+          {/* 最右侧：控制说明 */}
+          <Box>
+            <Controls shouldBlink={!state.isStarted || state.isGameOver} />
+          </Box>
         </Box>
       </Box>
-    </Box>
+    </I18nContext.Provider>
   );
 };
 

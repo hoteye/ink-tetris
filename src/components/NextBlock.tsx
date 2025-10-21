@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Box, Text } from 'ink';
 import { blockShape, blockColors, BlockType } from '../core/constants.js';
+import { I18nContext } from '../i18n/I18nContext.js';
+import { t } from '../i18n/languages.js';
 
 interface NextBlockProps {
   nextBlockType: string;
 }
 
 export const NextBlock: React.FC<NextBlockProps> = ({ nextBlockType }) => {
+  const { language } = useContext(I18nContext);
   const shape = blockShape[nextBlockType as BlockType];
   const color = blockColors[nextBlockType as BlockType];
 
@@ -21,7 +24,7 @@ export const NextBlock: React.FC<NextBlockProps> = ({ nextBlockType }) => {
     <Box flexDirection="column" borderStyle="round" borderColor="cyan" paddingX={1} paddingY={1}>
       <Box marginBottom={1}>
         <Text bold color="cyan">
-          NEXT
+          {t(language, 'next')}
         </Text>
       </Box>
       {shape.map((row, y) => {

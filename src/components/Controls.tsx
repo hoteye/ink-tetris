@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Box, Text } from 'ink';
+import { I18nContext } from '../i18n/I18nContext.js';
+import { t } from '../i18n/languages.js';
 
 interface ControlsProps {
   shouldBlink?: boolean; // 是否需要闪烁 R 键提示
 }
 
 export const Controls: React.FC<ControlsProps> = ({ shouldBlink = false }) => {
+  const { language } = useContext(I18nContext);
   const [showBlink, setShowBlink] = useState(true);
 
   useEffect(() => {
@@ -25,37 +28,42 @@ export const Controls: React.FC<ControlsProps> = ({ shouldBlink = false }) => {
     <Box flexDirection="column" borderStyle="round" borderColor="blue" padding={1}>
       <Box marginBottom={1}>
         <Text bold color="cyan">
-          CONTROLS
+          {t(language, 'controls')}
         </Text>
       </Box>
       <Box flexDirection="column">
         <Text dimColor>
-          <Text color="yellow">←/→</Text> : Move
+          <Text color="yellow">{t(language, 'leftRight')}</Text> : {t(language, 'move')}
         </Text>
         <Text dimColor>
-          <Text color="yellow">↑</Text>   : Rotate
+          <Text color="yellow">{t(language, 'up')}</Text> : {t(language, 'rotate')}
         </Text>
         <Text dimColor>
-          <Text color="yellow">↓</Text>   : Soft Drop
+          <Text color="yellow">{t(language, 'down')}</Text> : {t(language, 'softDrop')}
         </Text>
         <Text dimColor>
-          <Text color="yellow">Space</Text> : Hard Drop
+          <Text color="yellow">{t(language, 'space')}</Text> : {t(language, 'hardDrop')}
         </Text>
         <Text dimColor>
-          <Text color="yellow">P</Text>   : Pause
+          <Text color="yellow">{t(language, 'p')}</Text>   : {t(language, 'pause')}
         </Text>
         {shouldBlink && showBlink ? (
           <Text bold color="yellow" backgroundColor="red">
-            <Text color="yellow">R</Text>   : Restart/Start
+            <Text color="yellow">{t(language, 'r')}</Text>   : {t(language, 'restart')}
           </Text>
         ) : (
           <Text dimColor>
-            <Text color="yellow">R</Text>   : Restart/Start
+            <Text color="yellow">{t(language, 'r')}</Text>   : {t(language, 'restart')}
           </Text>
         )}
         <Text dimColor>
-          <Text color="yellow">Q</Text>   : Quit
+          <Text color="yellow">{t(language, 'q')}</Text>   : {t(language, 'quit')}
         </Text>
+        <Box marginTop={1}>
+          <Text dimColor>
+            <Text color="green">{t(language, 'l')}</Text>   : {t(language, 'language')}
+          </Text>
+        </Box>
       </Box>
     </Box>
   );
