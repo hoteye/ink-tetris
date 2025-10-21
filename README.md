@@ -30,6 +30,10 @@ npm run build
 npm start
 ```
 
+## Gameplay
+
+![Ink Tetris Game Screen](https://raw.githubusercontent.com/hoteye/ink-tetris/master/screenshot.png)
+
 ## Controls
 
 - **Left/Right Arrow** : Move left/right
