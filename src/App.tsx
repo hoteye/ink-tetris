@@ -96,13 +96,13 @@ const App: React.FC = () => {
         <Box>
           {/* 游戏板 */}
           <Box marginRight={2}>
-            <GameBoard matrix={state.matrix} currentBlock={state.currentBlock} />
+            <GameBoard matrix={state.matrix} currentBlock={state.currentBlock} isGameOver={state.isGameOver} />
           </Box>
 
           {/* 中间栏：Next 和 Info */}
           <Box flexDirection="column" marginRight={2}>
             {/* 下一个方块 */}
-            <Box marginBottom={2}>
+            <Box marginBottom={1}>
               <NextBlock nextBlockType={state.nextBlockType} />
             </Box>
 
@@ -112,7 +112,6 @@ const App: React.FC = () => {
               lines={state.lines}
               level={state.speedLevel}
               isPaused={state.isPaused}
-              isGameOver={state.isGameOver}
             />
           </Box>
 

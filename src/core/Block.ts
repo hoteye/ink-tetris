@@ -1,4 +1,4 @@
-import { BlockType, blockShape, origin } from './constants.js';
+import { BlockType, blockShape, origin, INVISIBLE_ROWS } from './constants.js';
 
 export interface BlockData {
   type: BlockType;
@@ -30,13 +30,13 @@ export class Block implements BlockData {
     if (option.xy) {
       this.xy = option.xy;
     } else {
-      // 初始位置 (与 react-tetris 保持一致)
+      // 初始位置 (在不可见区域顶部生成)
       switch (option.type) {
         case 'I':
-          this.xy = [0, 3];
+          this.xy = [INVISIBLE_ROWS - 1, 3];
           break;
         default:
-          this.xy = [-1, 4];
+          this.xy = [INVISIBLE_ROWS - 2, 4];
           break;
       }
     }

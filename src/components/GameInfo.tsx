@@ -8,7 +8,7 @@ interface GameInfoProps {
   lines: number;
   level: number;
   isPaused: boolean;
-  isGameOver: boolean;
+  isGameOver?: boolean;
 }
 
 export const GameInfo: React.FC<GameInfoProps> = ({
@@ -16,9 +16,9 @@ export const GameInfo: React.FC<GameInfoProps> = ({
   lines,
   level,
   isPaused,
-  isGameOver,
 }) => {
   const { language } = useContext(I18nContext);
+
   return (
     <Box flexDirection="column">
       <Box marginBottom={1} flexDirection="column">

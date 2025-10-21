@@ -11,6 +11,8 @@ import {
 } from './utils.js';
 import { blankMatrix, speeds, eachLines, maxPoint } from './constants.js';
 
+export type GameOverReason = 'topBlocked' | 'noSpace' | null;
+
 export interface GameState {
   matrix: Matrix;
   currentBlock: Block | null;
@@ -20,6 +22,7 @@ export interface GameState {
   speedLevel: number;
   isPaused: boolean;
   isGameOver: boolean;
+  gameOverReason: GameOverReason;
   isStarted: boolean;
 }
 
@@ -33,6 +36,7 @@ export function useGameState() {
     speedLevel: 1,
     isPaused: false,
     isGameOver: false,
+    gameOverReason: null,
     isStarted: false,
   });
 
@@ -52,6 +56,7 @@ export function useGameState() {
       speedLevel: 1,
       isPaused: false,
       isGameOver: false,
+      gameOverReason: null,
       isStarted: true,
     });
   }, [state.nextBlockType]);
@@ -90,8 +95,19 @@ export function useGameState() {
       const nextBlock = new Block({ type: prev.nextBlockType as any });
       const nextNextType = getNextType();
 
-      // 检查游戏是否结束
-      const gameOver = !want(nextBlock, newMatrix) || isOver(newMatrix);
+      // 检查游戏是否结束，并记录失败原因
+      let gameOverReason: GameOverReason = null;
+      let gameOver = false;
+
+      if (isOver(newMatrix)) {
+        // 方块堆积到顶部
+        gameOverReason = 'topBlocked';
+        gameOver = true;
+      } else if (!want(nextBlock, newMatrix)) {
+        // 新方块无法放置
+        gameOverReason = 'noSpace';
+        gameOver = true;
+      }
 
       return {
         ...prev,
@@ -102,6 +118,7 @@ export function useGameState() {
         lines: newLines,
         speedLevel: newSpeedLevel,
         isGameOver: gameOver,
+        gameOverReason,
       };
     });
   }, []);

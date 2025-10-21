@@ -12,6 +12,7 @@ export function useGameState() {
         speedLevel: 1,
         isPaused: false,
         isGameOver: false,
+        gameOverReason: null,
         isStarted: false,
     });
     const fallIntervalRef = useRef(null);
@@ -28,6 +29,7 @@ export function useGameState() {
             speedLevel: 1,
             isPaused: false,
             isGameOver: false,
+            gameOverReason: null,
             isStarted: true,
         });
     }, [state.nextBlockType]);
@@ -58,8 +60,19 @@ export function useGameState() {
             // 生成新方块
             const nextBlock = new Block({ type: prev.nextBlockType });
             const nextNextType = getNextType();
-            // 检查游戏是否结束
-            const gameOver = !want(nextBlock, newMatrix) || isOver(newMatrix);
+            // 检查游戏是否结束，并记录失败原因
+            let gameOverReason = null;
+            let gameOver = false;
+            if (isOver(newMatrix)) {
+                // 方块堆积到顶部
+                gameOverReason = 'topBlocked';
+                gameOver = true;
+            }
+            else if (!want(nextBlock, newMatrix)) {
+                // 新方块无法放置
+                gameOverReason = 'noSpace';
+                gameOver = true;
+            }
             return {
                 ...prev,
                 matrix: newMatrix,
@@ -69,6 +82,7 @@ export function useGameState() {
                 lines: newLines,
                 speedLevel: newSpeedLevel,
                 isGameOver: gameOver,
+                gameOverReason,
             };
         });
     }, []);

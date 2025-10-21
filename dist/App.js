@@ -82,11 +82,11 @@ const App = () => {
                     ")")),
             React.createElement(Box, null,
                 React.createElement(Box, { marginRight: 2 },
-                    React.createElement(GameBoard, { matrix: state.matrix, currentBlock: state.currentBlock })),
+                    React.createElement(GameBoard, { matrix: state.matrix, currentBlock: state.currentBlock, isGameOver: state.isGameOver })),
                 React.createElement(Box, { flexDirection: "column", marginRight: 2 },
-                    React.createElement(Box, { marginBottom: 2 },
+                    React.createElement(Box, { marginBottom: 1 },
                         React.createElement(NextBlock, { nextBlockType: state.nextBlockType })),
-                    React.createElement(GameInfo, { score: state.score, lines: state.lines, level: state.speedLevel, isPaused: state.isPaused, isGameOver: state.isGameOver })),
+                    React.createElement(GameInfo, { score: state.score, lines: state.lines, level: state.speedLevel, isPaused: state.isPaused })),
                 React.createElement(Box, null,
                     React.createElement(Controls, { shouldBlink: !state.isStarted || state.isGameOver }))))));
 };

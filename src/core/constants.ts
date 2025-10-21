@@ -44,6 +44,10 @@ export const blockTypes: BlockType[] = ['I', 'L', 'J', 'Z', 'S', 'O', 'T'];
 // 游戏配置
 export const BOARD_WIDTH = 10;
 export const BOARD_HEIGHT = 20;
+// 顶部不可见行数（用于方块生成和过渡）
+export const INVISIBLE_ROWS = 4;
+// 显示的可见行数
+export const VISIBLE_ROWS = BOARD_HEIGHT - INVISIBLE_ROWS;
 
 // 速度等级配置 (毫秒)
 export const speeds = [800, 650, 500, 370, 250, 160];

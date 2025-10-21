@@ -1,5 +1,5 @@
 import { Block } from './Block.js';
-import { BlockType, blockTypes, BOARD_WIDTH, BOARD_HEIGHT } from './constants.js';
+import { BlockType, blockTypes, BOARD_WIDTH, BOARD_HEIGHT, INVISIBLE_ROWS } from './constants.js';
 
 export type Matrix = number[][];
 
@@ -60,9 +60,9 @@ export function isClear(matrix: Matrix): number[] | false {
   return clearLines.length === 0 ? false : clearLines;
 }
 
-// 检查游戏是否结束 (第一行有方块)
+// 检查游戏是否结束 (可见区域顶部有方块)
 export function isOver(matrix: Matrix): boolean {
-  return matrix[0].some((cell) => !!cell);
+  return matrix[INVISIBLE_ROWS].some((cell) => !!cell);
 }
 
 // 将方块合并到矩阵
