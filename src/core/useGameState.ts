@@ -9,7 +9,7 @@ import {
   calculatePoints,
   Matrix,
 } from './utils.js';
-import { blankMatrix, speeds, eachLines, maxPoint } from './constants.js';
+import { blankMatrix, speeds, eachLines, maxPoint, INVISIBLE_ROWS } from './constants.js';
 
 export type GameOverReason = 'topBlocked' | 'noSpace' | null;
 
@@ -107,6 +107,18 @@ export function useGameState() {
         // 新方块无法放置
         gameOverReason = 'noSpace';
         gameOver = true;
+      }
+
+      if (gameOver) {
+        const spawnRowsSnapshot = newMatrix
+          .slice(0, INVISIBLE_ROWS)
+          .map((row) => row.map((cell) => (cell ? '▓' : '·')).join(''));
+        console.log('[GameOver]', {
+          reason: gameOverReason,
+          spawnRows: spawnRowsSnapshot,
+          lines: newLines,
+          score: newScore,
+        });
       }
 
       return {
