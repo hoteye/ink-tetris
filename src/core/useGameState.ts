@@ -99,9 +99,10 @@ export function useGameState() {
       let gameOverReason: GameOverReason = null;
       let gameOver = false;
 
-      if (isOver(newMatrix)) {
-        // 方块堆积到顶部
-        gameOverReason = 'topBlocked';
+      // 只有当新方块无法放置时才判定游戏结束
+      if (!want(nextBlock, newMatrix)) {
+        // 新方块无法放置
+        gameOverReason = 'noSpace';
         gameOver = true;
       }
 

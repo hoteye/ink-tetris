@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { Block } from './Block.js';
-import { getNextType, want, mergeBlockToMatrix, clearFullLines, isOver, calculatePoints, } from './utils.js';
+import { getNextType, want, mergeBlockToMatrix, clearFullLines, calculatePoints, } from './utils.js';
 import { blankMatrix, speeds, eachLines, maxPoint } from './constants.js';
 export function useGameState() {
     const [state, setState] = useState({
@@ -63,9 +63,10 @@ export function useGameState() {
             // 检查游戏是否结束，并记录失败原因
             let gameOverReason = null;
             let gameOver = false;
-            if (isOver(newMatrix)) {
-                // 方块堆积到顶部
-                gameOverReason = 'topBlocked';
+            // 只有当新方块无法放置时才判定游戏结束
+            if (!want(nextBlock, newMatrix)) {
+                // 新方块无法放置
+                gameOverReason = 'noSpace';
                 gameOver = true;
             }
             return {
