@@ -103,10 +103,6 @@ export function useGameState() {
         // 方块堆积到顶部
         gameOverReason = 'topBlocked';
         gameOver = true;
-      } else if (!want(nextBlock, newMatrix)) {
-        // 新方块无法放置
-        gameOverReason = 'noSpace';
-        gameOver = true;
       }
 
       if (gameOver) {
