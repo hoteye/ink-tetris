@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { Block } from './Block.js';
 import { getNextType, want, mergeBlockToMatrix, clearFullLines, isOver, calculatePoints, } from './utils.js';
-import { blankMatrix, speeds, eachLines, maxPoint, INVISIBLE_ROWS } from './constants.js';
+import { blankMatrix, speeds, eachLines, maxPoint } from './constants.js';
 export function useGameState() {
     const [state, setState] = useState({
         matrix: blankMatrix.map((row) => [...row]),
@@ -67,17 +67,6 @@ export function useGameState() {
                 // 方块堆积到顶部
                 gameOverReason = 'topBlocked';
                 gameOver = true;
-            }
-            if (gameOver) {
-                const spawnRowsSnapshot = newMatrix
-                    .slice(0, INVISIBLE_ROWS)
-                    .map((row) => row.map((cell) => (cell ? '▓' : '·')).join(''));
-                console.log('[GameOver]', {
-                    reason: gameOverReason,
-                    spawnRows: spawnRowsSnapshot,
-                    lines: newLines,
-                    score: newScore,
-                });
             }
             return {
                 ...prev,

@@ -105,17 +105,6 @@ export function useGameState() {
         gameOver = true;
       }
 
-      if (gameOver) {
-        const spawnRowsSnapshot = newMatrix
-          .slice(0, INVISIBLE_ROWS)
-          .map((row) => row.map((cell) => (cell ? '▓' : '·')).join(''));
-        console.log('[GameOver]', {
-          reason: gameOverReason,
-          spawnRows: spawnRowsSnapshot,
-          lines: newLines,
-          score: newScore,
-        });
-      }
 
       return {
         ...prev,
