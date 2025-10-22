@@ -53,7 +53,7 @@ export function isOver(matrix) {
     }
     return false;
 }
-// 将方块合并到矩阵（只合并可见区域的方块）
+// 将方块合并到矩阵
 export function mergeBlockToMatrix(block, matrix) {
     const newMatrix = matrix.map((row) => [...row]);
     const { xy, shape } = block;
@@ -62,9 +62,7 @@ export function mergeBlockToMatrix(block, matrix) {
             if (n) {
                 const y = xy[0] + k1;
                 const x = xy[1] + k2;
-                // 只合并可见区域的方块（y >= INVISIBLE_ROWS）
-                // 不可见区域仅用于方块生成和过渡动画，不应保存方块数据
-                if (y >= INVISIBLE_ROWS && y < BOARD_HEIGHT && x >= 0 && x < BOARD_WIDTH) {
+                if (y >= 0 && y < BOARD_HEIGHT && x >= 0 && x < BOARD_WIDTH) {
                     newMatrix[y][x] = 1;
                 }
             }

@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { Block } from './Block.js';
 import { getNextType, want, mergeBlockToMatrix, clearFullLines, calculatePoints, } from './utils.js';
-import { blankMatrix, speeds, eachLines, maxPoint } from './constants.js';
+import { blankMatrix, speeds, eachLines, maxPoint, INVISIBLE_ROWS } from './constants.js';
 export function useGameState() {
     const [state, setState] = useState({
         matrix: blankMatrix.map((row) => [...row]),
@@ -63,11 +63,38 @@ export function useGameState() {
             // 检查游戏是否结束，并记录失败原因
             let gameOverReason = null;
             let gameOver = false;
-            // 只有当新方块无法放置时才判定游戏结束
+            // 检查新方块能否放置在生成位置
             if (!want(nextBlock, newMatrix)) {
-                // 新方块无法放置
+                // 新方块无法在生成位置放置
                 gameOverReason = 'noSpace';
                 gameOver = true;
+            }
+            else {
+                // 新方块可以在生成位置放置，但需要检查它能否下落到可见区
+                // 尝试让方块下落到可见区（行 >= INVISIBLE_ROWS）
+                let testBlock = nextBlock;
+                let canEnterVisible = false;
+                // 检查方块的任何部分是否已经在可见区或能进入可见区
+                for (let i = 0; i < 10; i++) { // 最多尝试10格
+                    const blockBottomRow = testBlock.xy[0] + testBlock.shape.length - 1;
+                    // 如果方块底部已经在可见区，说明可以进入
+                    if (blockBottomRow >= INVISIBLE_ROWS) {
+                        canEnterVisible = true;
+                        break;
+                    }
+                    // 尝试下落一格
+                    const nextTestBlock = testBlock.fall();
+                    if (!want(nextTestBlock, newMatrix)) {
+                        // 无法继续下落，检查是否到达可见区
+                        break;
+                    }
+                    testBlock = nextTestBlock;
+                }
+                // 如果方块无法进入可见区（在不可见区就被卡住了），游戏结束
+                if (!canEnterVisible) {
+                    gameOverReason = 'topBlocked';
+                    gameOver = true;
+                }
             }
             return {
                 ...prev,
