@@ -60,9 +60,14 @@ export function isClear(matrix: Matrix): number[] | false {
   return clearLines.length === 0 ? false : clearLines;
 }
 
-// 检查游戏是否结束 (可见区域顶部有方块)
+// 检查游戏是否结束 (生成区被方块占据)
 export function isOver(matrix: Matrix): boolean {
-  return matrix[INVISIBLE_ROWS].some((cell) => !!cell);
+  for (let y = 0; y < INVISIBLE_ROWS; y++) {
+    if (matrix[y].some((cell) => !!cell)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 // 将方块合并到矩阵
