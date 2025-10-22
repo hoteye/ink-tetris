@@ -10,7 +10,7 @@ import { Language, languages, t } from './i18n/languages.js';
 
 const App: React.FC = () => {
   const { exit } = useApp();
-  const { state, startGame, togglePause, moveBlock, hardDrop } = useGameState();
+  const { state, startGame, togglePause, moveBlock, hardDrop, toggleSound } = useGameState();
   const [language, setLanguage] = useState<Language>('en');
 
   // 键盘控制
@@ -22,6 +22,12 @@ const App: React.FC = () => {
         const currentIndex = langs.indexOf(prev);
         return langs[(currentIndex + 1) % langs.length];
       });
+      return;
+    }
+
+    // 切换声音
+    if (input === 'm' || input === 'M') {
+      toggleSound();
       return;
     }
 

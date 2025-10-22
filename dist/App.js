@@ -9,7 +9,7 @@ import { I18nContext } from './i18n/I18nContext.js';
 import { languages, t } from './i18n/languages.js';
 const App = () => {
     const { exit } = useApp();
-    const { state, startGame, togglePause, moveBlock, hardDrop } = useGameState();
+    const { state, startGame, togglePause, moveBlock, hardDrop, toggleSound } = useGameState();
     const [language, setLanguage] = useState('en');
     // 键盘控制
     useInput((input, key) => {
@@ -20,6 +20,11 @@ const App = () => {
                 const currentIndex = langs.indexOf(prev);
                 return langs[(currentIndex + 1) % langs.length];
             });
+            return;
+        }
+        // 切换声音
+        if (input === 'm' || input === 'M') {
+            toggleSound();
             return;
         }
         // 退出
