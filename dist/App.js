@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Text, useInput, useApp } from 'ink';
+import { createRequire } from 'module';
 import { useGameState } from './core/useGameState.js';
 import { GameBoard } from './components/GameBoard.js';
 import { NextBlock } from './components/NextBlock.js';
 import { GameInfo } from './components/GameInfo.js';
 import { Controls } from './components/Controls.js';
 import { I18nContext } from './i18n/I18nContext.js';
-import { languages, t } from './i18n/languages.js';
+import { t } from './i18n/languages.js';
+const require = createRequire(import.meta.url);
+const { version } = require('../package.json');
 const App = () => {
     const { exit } = useApp();
-    const { state, startGame, togglePause, moveBlock, hardDrop, toggleSound } = useGameState();
+    const { state, startGame, togglePause, moveBlock, hardDrop } = useGameState();
     const [language, setLanguage] = useState('en');
     // 键盘控制
     useInput((input, key) => {
@@ -20,11 +23,6 @@ const App = () => {
                 const currentIndex = langs.indexOf(prev);
                 return langs[(currentIndex + 1) % langs.length];
             });
-            return;
-        }
-        // 切换声音
-        if (input === 'm' || input === 'M') {
-            toggleSound();
             return;
         }
         // 退出
@@ -78,13 +76,11 @@ const App = () => {
     }, [state.isStarted, startGame]);
     return (React.createElement(I18nContext.Provider, { value: { language, setLanguage } },
         React.createElement(Box, { flexDirection: "column", padding: 1, alignItems: "center" },
-            React.createElement(Box, { marginBottom: 1, justifyContent: "center", width: 50 },
-                React.createElement(Box, { marginRight: 2 },
-                    React.createElement(Text, { bold: true, color: "cyan" }, t(language, 'title'))),
-                React.createElement(Text, { dimColor: true, color: "gray", wrap: "truncate" },
-                    "(",
-                    languages[language],
-                    ")")),
+            React.createElement(Box, { marginBottom: 1, flexDirection: "column", alignItems: "center", width: 50 },
+                React.createElement(Text, { bold: true, color: "cyan" }, t(language, 'title')),
+                React.createElement(Text, { dimColor: true, color: "gray" },
+                    "v",
+                    version)),
             React.createElement(Box, null,
                 React.createElement(Box, { marginRight: 2 },
                     React.createElement(GameBoard, { matrix: state.matrix, currentBlock: state.currentBlock, isGameOver: state.isGameOver })),

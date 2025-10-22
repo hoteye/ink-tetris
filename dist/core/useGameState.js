@@ -2,7 +2,6 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { Block } from './Block.js';
 import { getNextType, want, mergeBlockToMatrix, clearFullLines, isOver, calculatePoints, } from './utils.js';
 import { blankMatrix, speeds, eachLines, maxPoint } from './constants.js';
-import { getAudioService } from '../audio/audioService.js';
 export function useGameState() {
     const [state, setState] = useState({
         matrix: blankMatrix.map((row) => [...row]),
@@ -15,10 +14,8 @@ export function useGameState() {
         isGameOver: false,
         gameOverReason: null,
         isStarted: false,
-        soundEnabled: true,
     });
     const fallIntervalRef = useRef(null);
-    const audioService = getAudioService({ enabled: state.soundEnabled });
     // 开始游戏
     const startGame = useCallback(() => {
         const firstType = state.nextBlockType;
@@ -34,27 +31,15 @@ export function useGameState() {
             isGameOver: false,
             gameOverReason: null,
             isStarted: true,
-            soundEnabled: state.soundEnabled,
         });
-        // Start background music
-        audioService.playBackgroundMusic(120);
-    }, [state.nextBlockType, state.soundEnabled, audioService]);
+    }, [state.nextBlockType]);
     // 暂停/继续
     const togglePause = useCallback(() => {
         setState((prev) => ({
             ...prev,
             isPaused: !prev.isPaused,
         }));
-        audioService.playPause();
-    }, [audioService]);
-    // 切换声音
-    const toggleSound = useCallback(() => {
-        setState((prev) => ({
-            ...prev,
-            soundEnabled: !prev.soundEnabled,
-        }));
-        audioService.setConfig({ enabled: !state.soundEnabled });
-    }, [state.soundEnabled, audioService]);
+    }, []);
     // 锁定方块并生成新方块
     const lockBlock = useCallback(() => {
         setState((prev) => {
@@ -88,19 +73,6 @@ export function useGameState() {
                 gameOverReason = 'noSpace';
                 gameOver = true;
             }
-            // 播放音效
-            if (gameOver) {
-                audioService.playGameOver();
-            }
-            else if (cleared > 0) {
-                audioService.playLineCleared();
-            }
-            else {
-                audioService.playBlockPlaced();
-            }
-            // 更新音乐速度（根据等级调整）
-            const tempos = [120, 130, 140, 150, 160, 170];
-            audioService.updateMusicTempo(tempos[newSpeedLevel - 1]);
             return {
                 ...prev,
                 matrix: newMatrix,
@@ -113,7 +85,7 @@ export function useGameState() {
                 gameOverReason,
             };
         });
-    }, [audioService]);
+    }, []);
     // 移动方块
     const moveBlock = useCallback((direction) => {
         setState((prev) => {
@@ -194,6 +166,5 @@ export function useGameState() {
         togglePause,
         moveBlock,
         hardDrop,
-        toggleSound,
     };
 }

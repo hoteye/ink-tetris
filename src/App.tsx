@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Text, useInput, useApp } from 'ink';
+import { createRequire } from 'module';
 import { useGameState } from './core/useGameState.js';
 import { GameBoard } from './components/GameBoard.js';
 import { NextBlock } from './components/NextBlock.js';
 import { GameInfo } from './components/GameInfo.js';
 import { Controls } from './components/Controls.js';
 import { I18nContext } from './i18n/I18nContext.js';
-import { Language, languages, t } from './i18n/languages.js';
+import { Language, t } from './i18n/languages.js';
+
+const require = createRequire(import.meta.url);
+const { version } = require('../package.json') as { version: string };
 
 const App: React.FC = () => {
   const { exit } = useApp();
-  const { state, startGame, togglePause, moveBlock, hardDrop, toggleSound } = useGameState();
+  const { state, startGame, togglePause, moveBlock, hardDrop } = useGameState();
   const [language, setLanguage] = useState<Language>('en');
 
   // 键盘控制
@@ -22,12 +26,6 @@ const App: React.FC = () => {
         const currentIndex = langs.indexOf(prev);
         return langs[(currentIndex + 1) % langs.length];
       });
-      return;
-    }
-
-    // 切换声音
-    if (input === 'm' || input === 'M') {
-      toggleSound();
       return;
     }
 
@@ -86,15 +84,13 @@ const App: React.FC = () => {
   return (
     <I18nContext.Provider value={{ language, setLanguage }}>
       <Box flexDirection="column" padding={1} alignItems="center">
-        {/* 标题和语言显示 */}
-        <Box marginBottom={1} justifyContent="center" width={50}>
-          <Box marginRight={2}>
-            <Text bold color="cyan">
-              {t(language, 'title')}
-            </Text>
-          </Box>
-          <Text dimColor color="gray" wrap="truncate">
-            ({languages[language]})
+        {/* 标题与版本号 */}
+        <Box marginBottom={1} flexDirection="column" alignItems="center" width={50}>
+          <Text bold color="cyan">
+            {t(language, 'title')}
+          </Text>
+          <Text dimColor color="gray">
+            v{version}
           </Text>
         </Box>
 

@@ -25,10 +25,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "beep": "^0.0.0",
-    "ffmpeg-static": "^5.2.0",
     "ink": "^6.3.1",
-    "play-sound": "^1.1.6",
     "react": "^19.2.0"
   },
   "devDependencies": {

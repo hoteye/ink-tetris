@@ -55,6 +55,7 @@ npm start
 - Next piece preview
 - Score and level tracking
 - Pause functionality
+- Built-in internationalization (English, 中文, 日本語, 한국어, Français, Español)
 
 ## Credits
 
