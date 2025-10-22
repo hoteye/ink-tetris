@@ -1,6 +1,6 @@
 {
   "name": "ink-tetris",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "type": "module",
   "description": "A Tetris game built with Ink for the terminal (based on react-tetris)",
   "main": "dist/index.js",
