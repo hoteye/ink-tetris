@@ -68,11 +68,6 @@ export function useGameState() {
                 gameOverReason = 'topBlocked';
                 gameOver = true;
             }
-            else if (!want(nextBlock, newMatrix)) {
-                // 新方块无法放置
-                gameOverReason = 'noSpace';
-                gameOver = true;
-            }
             if (gameOver) {
                 const spawnRowsSnapshot = newMatrix
                     .slice(0, INVISIBLE_ROWS)
