@@ -28,10 +28,10 @@ export const Controls: React.FC<ControlsProps> = ({ shouldBlink = false, isPause
 
   // 计算填充行数
   // GameBoard 高度 = 上框 (1) + 内容 (VISIBLE_ROWS) + 下框 (1) = VISIBLE_ROWS + 2 = 18
-  // Controls 内容行数 = 标题 (1) + 控制说明 (9) + 边框/填充 = 约 11-12 行
+  // Controls 内容行数 = 标题 (1) + 控制说明 (10) + 边框/填充 = 约 12 行
   // 需要添加空行使总高度达到 18 行
   const GAMEBOARD_HEIGHT = VISIBLE_ROWS + 2; // 上下框各 1 行
-  const controlsContentLines = 11; // 标题 1 + 控制说明 9 + 边界 1
+  const controlsContentLines = 12; // 标题 1 + 控制说明 10 + 边界 1
   const paddingNeeded = Math.max(0, GAMEBOARD_HEIGHT - controlsContentLines - 2); // -2 for padding borders
 
   return (
@@ -80,6 +80,9 @@ export const Controls: React.FC<ControlsProps> = ({ shouldBlink = false, isPause
             <Text color="green">{t(language, 'l')}</Text>   : {t(language, 'language')}
           </Text>
         </Box>
+        <Text dimColor wrap="truncate">
+          <Text color="green">{t(language, 'i')}</Text>   : {t(language, 'scoring')}
+        </Text>
 
         {/* 填充空行以匹配 GameBoard 高度 */}
         {Array.from({ length: paddingNeeded }).map((_, i) => (

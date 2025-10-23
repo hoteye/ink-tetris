@@ -18,10 +18,10 @@ export const Controls = ({ shouldBlink = false, isPaused = false }) => {
     }, [shouldBlink, isPaused]);
     // 计算填充行数
     // GameBoard 高度 = 上框 (1) + 内容 (VISIBLE_ROWS) + 下框 (1) = VISIBLE_ROWS + 2 = 18
-    // Controls 内容行数 = 标题 (1) + 控制说明 (9) + 边框/填充 = 约 11-12 行
+    // Controls 内容行数 = 标题 (1) + 控制说明 (10) + 边框/填充 = 约 12 行
     // 需要添加空行使总高度达到 18 行
     const GAMEBOARD_HEIGHT = VISIBLE_ROWS + 2; // 上下框各 1 行
-    const controlsContentLines = 11; // 标题 1 + 控制说明 9 + 边界 1
+    const controlsContentLines = 12; // 标题 1 + 控制说明 10 + 边界 1
     const paddingNeeded = Math.max(0, GAMEBOARD_HEIGHT - controlsContentLines - 2); // -2 for padding borders
     return (React.createElement(Box, { flexDirection: "column", borderStyle: "round", borderColor: "blue", padding: 1, width: 22, height: GAMEBOARD_HEIGHT },
         React.createElement(Box, { marginBottom: 1 },
@@ -66,6 +66,10 @@ export const Controls = ({ shouldBlink = false, isPaused = false }) => {
                     React.createElement(Text, { color: "green" }, t(language, 'l')),
                     "   : ",
                     t(language, 'language'))),
+            React.createElement(Text, { dimColor: true, wrap: "truncate" },
+                React.createElement(Text, { color: "green" }, t(language, 'i')),
+                "   : ",
+                t(language, 'scoring')),
             Array.from({ length: paddingNeeded }).map((_, i) => (React.createElement(Box, { key: `padding-${i}` },
                 React.createElement(Text, null, " ")))))));
 };
