@@ -35,7 +35,7 @@ export const Controls: React.FC<ControlsProps> = ({ shouldBlink = false, isPause
   const paddingNeeded = Math.max(0, GAMEBOARD_HEIGHT - controlsContentLines - 2); // -2 for padding borders
 
   return (
-    <Box flexDirection="column" borderStyle="round" borderColor="blue" padding={1} width={22} height={GAMEBOARD_HEIGHT}>
+    <Box flexDirection="column" borderStyle="round" borderColor="blue" padding={1} width={24} height={GAMEBOARD_HEIGHT}>
       <Box marginBottom={1}>
         <Text bold color="cyan">
           {t(language, 'controls')}

@@ -23,7 +23,7 @@ export const Controls = ({ shouldBlink = false, isPaused = false }) => {
     const GAMEBOARD_HEIGHT = VISIBLE_ROWS + 2; // 上下框各 1 行
     const controlsContentLines = 13; // 标题 1 + 控制说明 11 + marginTop间隔 1
     const paddingNeeded = Math.max(0, GAMEBOARD_HEIGHT - controlsContentLines - 2); // -2 for padding borders
-    return (React.createElement(Box, { flexDirection: "column", borderStyle: "round", borderColor: "blue", padding: 1, width: 22, height: GAMEBOARD_HEIGHT },
+    return (React.createElement(Box, { flexDirection: "column", borderStyle: "round", borderColor: "blue", padding: 1, width: 24, height: GAMEBOARD_HEIGHT },
         React.createElement(Box, { marginBottom: 1 },
             React.createElement(Text, { bold: true, color: "cyan" }, t(language, 'controls'))),
         React.createElement(Box, { flexDirection: "column" },
