@@ -8,6 +8,7 @@ import { GameInfo } from './components/GameInfo.js';
 import { Controls } from './components/Controls.js';
 import { I18nContext } from './i18n/I18nContext.js';
 import { Language, t } from './i18n/languages.js';
+import { loadConfig, saveConfig } from './utils/config.js';
 
 const require = createRequire(import.meta.url);
 const { version } = require('../package.json') as { version: string };
@@ -16,6 +17,25 @@ const App: React.FC = () => {
   const { exit } = useApp();
   const { state, startGame, togglePause, moveBlock, hardDrop } = useGameState();
   const [language, setLanguage] = useState<Language>('en');
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // 在应用启动时加载配置
+  useEffect(() => {
+    const config = loadConfig();
+    if (config.language) {
+      setLanguage(config.language as Language);
+    }
+    setIsLoaded(true);
+  }, []);
+
+  // 当语言改变时保存配置
+  useEffect(() => {
+    if (isLoaded) {
+      const config = loadConfig();
+      config.language = language;
+      saveConfig(config);
+    }
+  }, [language, isLoaded]);
 
   // 键盘控制
   useInput((input, key) => {

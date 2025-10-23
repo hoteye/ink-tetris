@@ -5,7 +5,8 @@
   "description": "A Tetris game built with Ink for the terminal (based on react-tetris)",
   "main": "dist/index.js",
   "bin": {
-    "ink-tetris": "dist/index.js"
+    "ink-tetris": "dist/index.js",
+    "ink-tetris-uninstall": "bin/uninstall.js"
   },
   "scripts": {
     "build": "tsc",
