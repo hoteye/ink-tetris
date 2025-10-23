@@ -47,6 +47,7 @@ export const translations: Record<Language, Record<string, string>> = {
     scoringInfo4: '4 lines: 1500 pts',
     levelUpInfo: 'Level up: clear 20 lines',
     maxLevelInfo: 'Max level: 6',
+    pressToClose: 'Press I to close',
   },
   zh: {
     title: '俄罗斯方块 - INK 版本',
@@ -85,6 +86,7 @@ export const translations: Record<Language, Record<string, string>> = {
     scoringInfo4: '4行: 1500分',
     levelUpInfo: '升级: 消除20行',
     maxLevelInfo: '最高级别: 6级',
+    pressToClose: '按 I 关闭',
   },
   ja: {
     title: 'テトリス - INK バージョン',
@@ -123,6 +125,7 @@ export const translations: Record<Language, Record<string, string>> = {
     scoringInfo4: '4行: 1500点',
     levelUpInfo: 'レベルアップ: 20行消去',
     maxLevelInfo: '最高レベル: 6',
+    pressToClose: 'Iキーを押して閉じる',
   },
   ko: {
     title: '테트리스 - INK 버전',
@@ -161,6 +164,7 @@ export const translations: Record<Language, Record<string, string>> = {
     scoringInfo4: '4행: 1500점',
     levelUpInfo: '레벨업: 20행 클리어',
     maxLevelInfo: '최고 레벨: 6',
+    pressToClose: 'I를 눌러 닫기',
   },
   fr: {
     title: 'TETRIS - VERSION INK',
@@ -199,6 +203,7 @@ export const translations: Record<Language, Record<string, string>> = {
     scoringInfo4: '4 lignes: 1500 pts',
     levelUpInfo: 'Niveau+: 20 lignes',
     maxLevelInfo: 'Max niveau: 6',
+    pressToClose: 'Appuyez sur I pour fermer',
   },
   es: {
     title: 'TETRIS - VERSIÓN INK',
@@ -237,6 +242,7 @@ export const translations: Record<Language, Record<string, string>> = {
     scoringInfo4: '4 líneas: 1500 pts',
     levelUpInfo: 'Nivel+: 20 líneas',
     maxLevelInfo: 'Máx nivel: 6',
+    pressToClose: 'Presiona I para cerrar',
   },
 };
 

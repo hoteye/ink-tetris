@@ -35,7 +35,7 @@ export const ScoringModal: React.FC = () => {
 
         <Box marginTop={1}>
           <Text dimColor color="gray">
-            Press I to close
+            {t(language, 'pressToClose')}
           </Text>
         </Box>
       </Box>
