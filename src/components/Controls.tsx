@@ -79,7 +79,7 @@ export const Controls: React.FC<ControlsProps> = ({ shouldBlink = false, isPause
           <Text color="green">{t(language, 'l')}</Text>   : {t(language, 'language')}
         </Text>
         <Text dimColor wrap="truncate">
-          <Text color="green">{t(language, 'i')}</Text>   : {t(language, 'scoring')}
+          <Text color="green">{t(language, 'i')}</Text>   : {t(language, 'scoringRulesLabel')}
         </Text>
 
         {/* 填充空行以匹配 GameBoard 高度 */}

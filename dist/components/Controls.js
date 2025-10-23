@@ -68,7 +68,7 @@ export const Controls = ({ shouldBlink = false, isPaused = false }) => {
             React.createElement(Text, { dimColor: true, wrap: "truncate" },
                 React.createElement(Text, { color: "green" }, t(language, 'i')),
                 "   : ",
-                t(language, 'scoring')),
+                t(language, 'scoringRulesLabel')),
             Array.from({ length: paddingNeeded }).map((_, i) => (React.createElement(Box, { key: `padding-${i}` },
                 React.createElement(Text, null, " ")))))));
 };
