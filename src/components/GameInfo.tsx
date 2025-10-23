@@ -41,14 +41,6 @@ export const GameInfo: React.FC<GameInfoProps> = ({
         </Text>
         <Text color="white">{level}</Text>
       </Box>
-
-      {isPaused && (
-        <Box marginTop={1} borderStyle="round" borderColor="yellow" padding={1}>
-          <Text bold color="yellow">
-            {t(language, 'paused')}
-          </Text>
-        </Box>
-      )}
     </Box>
   );
 };

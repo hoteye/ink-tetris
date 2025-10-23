@@ -3,11 +3,11 @@ import { Box, Text } from 'ink';
 import { I18nContext } from '../i18n/I18nContext.js';
 import { t } from '../i18n/languages.js';
 import { VISIBLE_ROWS } from '../core/constants.js';
-export const Controls = ({ shouldBlink = false }) => {
+export const Controls = ({ shouldBlink = false, isPaused = false }) => {
     const { language } = useContext(I18nContext);
     const [showBlink, setShowBlink] = useState(true);
     useEffect(() => {
-        if (!shouldBlink) {
+        if (!shouldBlink && !isPaused) {
             setShowBlink(true);
             return;
         }
@@ -15,7 +15,7 @@ export const Controls = ({ shouldBlink = false }) => {
             setShowBlink((prev) => !prev);
         }, 500); // 每 500ms 切换一次
         return () => clearInterval(interval);
-    }, [shouldBlink]);
+    }, [shouldBlink, isPaused]);
     // 计算填充行数
     // GameBoard 高度 = 上框 (1) + 内容 (VISIBLE_ROWS) + 下框 (1) = VISIBLE_ROWS + 2 = 18
     // Controls 内容行数 = 标题 (1) + 控制说明 (9) + 边框/填充 = 约 11-12 行
@@ -43,10 +43,13 @@ export const Controls = ({ shouldBlink = false }) => {
                 React.createElement(Text, { color: "yellow" }, t(language, 'space')),
                 " : ",
                 t(language, 'hardDrop')),
-            React.createElement(Text, { dimColor: true, wrap: "truncate" },
+            isPaused && showBlink ? (React.createElement(Text, { bold: true, color: "yellow", backgroundColor: "red", wrap: "truncate" },
                 React.createElement(Text, { color: "yellow" }, t(language, 'p')),
                 "   : ",
-                t(language, 'pause')),
+                t(language, 'pause'))) : (React.createElement(Text, { dimColor: true, wrap: "truncate" },
+                React.createElement(Text, { color: "yellow" }, t(language, 'p')),
+                "   : ",
+                t(language, 'pause'))),
             shouldBlink && showBlink ? (React.createElement(Text, { bold: true, color: "yellow", backgroundColor: "red", wrap: "truncate" },
                 React.createElement(Text, { color: "yellow" }, t(language, 'r')),
                 "   : ",

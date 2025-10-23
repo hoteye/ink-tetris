@@ -89,6 +89,6 @@ const App = () => {
                         React.createElement(NextBlock, { nextBlockType: state.nextBlockType })),
                     React.createElement(GameInfo, { score: state.score, lines: state.lines, level: state.speedLevel, isPaused: state.isPaused })),
                 React.createElement(Box, null,
-                    React.createElement(Controls, { shouldBlink: !state.isStarted || state.isGameOver }))))));
+                    React.createElement(Controls, { shouldBlink: !state.isStarted || state.isGameOver, isPaused: state.isPaused }))))));
 };
 export default App;

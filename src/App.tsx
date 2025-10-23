@@ -119,7 +119,10 @@ const App: React.FC = () => {
 
           {/* 最右侧：控制说明 */}
           <Box>
-            <Controls shouldBlink={!state.isStarted || state.isGameOver} />
+            <Controls
+              shouldBlink={!state.isStarted || state.isGameOver}
+              isPaused={state.isPaused}
+            />
           </Box>
         </Box>
       </Box>

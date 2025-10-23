@@ -6,14 +6,15 @@ import { VISIBLE_ROWS } from '../core/constants.js';
 
 interface ControlsProps {
   shouldBlink?: boolean; // 是否需要闪烁 R 键提示
+  isPaused?: boolean; // 是否暂停（闪烁 P 键）
 }
 
-export const Controls: React.FC<ControlsProps> = ({ shouldBlink = false }) => {
+export const Controls: React.FC<ControlsProps> = ({ shouldBlink = false, isPaused = false }) => {
   const { language } = useContext(I18nContext);
   const [showBlink, setShowBlink] = useState(true);
 
   useEffect(() => {
-    if (!shouldBlink) {
+    if (!shouldBlink && !isPaused) {
       setShowBlink(true);
       return;
     }
@@ -23,7 +24,7 @@ export const Controls: React.FC<ControlsProps> = ({ shouldBlink = false }) => {
     }, 500); // 每 500ms 切换一次
 
     return () => clearInterval(interval);
-  }, [shouldBlink]);
+  }, [shouldBlink, isPaused]);
 
   // 计算填充行数
   // GameBoard 高度 = 上框 (1) + 内容 (VISIBLE_ROWS) + 下框 (1) = VISIBLE_ROWS + 2 = 18
@@ -53,9 +54,15 @@ export const Controls: React.FC<ControlsProps> = ({ shouldBlink = false }) => {
         <Text dimColor wrap="truncate">
           <Text color="yellow">{t(language, 'space')}</Text> : {t(language, 'hardDrop')}
         </Text>
-        <Text dimColor wrap="truncate">
-          <Text color="yellow">{t(language, 'p')}</Text>   : {t(language, 'pause')}
-        </Text>
+        {isPaused && showBlink ? (
+          <Text bold color="yellow" backgroundColor="red" wrap="truncate">
+            <Text color="yellow">{t(language, 'p')}</Text>   : {t(language, 'pause')}
+          </Text>
+        ) : (
+          <Text dimColor wrap="truncate">
+            <Text color="yellow">{t(language, 'p')}</Text>   : {t(language, 'pause')}
+          </Text>
+        )}
         {shouldBlink && showBlink ? (
           <Text bold color="yellow" backgroundColor="red" wrap="truncate">
             <Text color="yellow">{t(language, 'r')}</Text>   : {t(language, 'restart')}
