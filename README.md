@@ -46,6 +46,8 @@ npm start
 - **Space** : Hard drop
 - **P** : Pause
 - **R** : Start/Restart
+- **I** : Show scoring rules
+- **L** : Change language
 - **Q** : Quit
 
 ## Features
