@@ -76,6 +76,8 @@ export function useGameState() {
         return prev;
       }
 
+      console.log('[LOCK BLOCK] Locking block type:', prev.currentBlock.type, 'Position:', prev.currentBlock.xy);
+
       // 合并方块到矩阵
       let newMatrix = mergeBlockToMatrix(prev.currentBlock, prev.matrix);
 
@@ -104,36 +106,21 @@ export function useGameState() {
         // 新方块无法在生成位置放置
         gameOverReason = 'noSpace';
         gameOver = true;
-      } else {
-        // 新方块可以在生成位置放置，但需要检查它能否下落到可见区
-        // 尝试让方块下落到可见区（行 >= INVISIBLE_ROWS）
-        let testBlock = nextBlock;
-        let canEnterVisible = false;
-
-        // 检查方块的任何部分是否已经在可见区或能进入可见区
-        for (let i = 0; i < 10; i++) { // 最多尝试10格
-          const blockBottomRow = testBlock.xy[0] + testBlock.shape.length - 1;
-
-          // 如果方块底部已经在可见区，说明可以进入
-          if (blockBottomRow >= INVISIBLE_ROWS) {
-            canEnterVisible = true;
-            break;
-          }
-
-          // 尝试下落一格
-          const nextTestBlock = testBlock.fall();
-          if (!want(nextTestBlock, newMatrix)) {
-            // 无法继续下落，检查是否到达可见区
-            break;
-          }
-          testBlock = nextTestBlock;
-        }
-
-        // 如果方块无法进入可见区（在不可见区就被卡住了），游戏结束
-        if (!canEnterVisible) {
-          gameOverReason = 'topBlocked';
-          gameOver = true;
-        }
+        console.log('[GAME OVER] noSpace - Cannot place new block at spawn position');
+        console.log('Next block type:', prev.nextBlockType);
+        console.log('Block position:', nextBlock.xy);
+        console.log('Board state:', newMatrix.slice(0, INVISIBLE_ROWS).map((row, i) => `Row ${i}: ${row.join('')}`).join('\n'));
+      } else if (isOver(newMatrix)) {
+        // 检查隐藏行是否被方块占据（标准失败条件）
+        gameOverReason = 'topBlocked';
+        gameOver = true;
+        console.log('[GAME OVER] topBlocked - Invisible rows occupied');
+        console.log('Score:', prev.score, 'Lines:', prev.lines, 'Level:', prev.speedLevel);
+        console.log('Invisible rows state:');
+        newMatrix.slice(0, INVISIBLE_ROWS).forEach((row, i) => {
+          const hasBlocks = row.some(cell => cell);
+          console.log(`  Row ${i}: ${row.join('')} ${hasBlocks ? '← HAS BLOCKS' : ''}`);
+        });
       }
 
 
