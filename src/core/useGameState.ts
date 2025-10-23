@@ -9,7 +9,7 @@ import {
   calculatePoints,
   Matrix,
 } from './utils.js';
-import { blankMatrix, speeds, eachLines, maxPoint, INVISIBLE_ROWS } from './constants.js';
+import { blankMatrix, speeds, eachLines, maxPoint, INVISIBLE_ROWS, BOARD_HEIGHT, BOARD_WIDTH } from './constants.js';
 
 export type GameOverReason = 'topBlocked' | 'noSpace' | null;
 
@@ -101,17 +101,46 @@ export function useGameState() {
       let gameOverReason: GameOverReason = null;
       let gameOver = false;
 
-      // 检查新方块能否放置在生成位置
+      // 标准俄罗斯方块规则：
+      // 1. 如果新方块无法放置在生成位置
+      // 2. 且无法放置的原因是与可见区域（第INVISIBLE_ROWS行及以下）的方块重叠
+      // 那么游戏结束
       if (!want(nextBlock, newMatrix)) {
-        // 新方块无法在生成位置放置
-        gameOverReason = 'noSpace';
-        gameOver = true;
-        console.log('[GAME OVER] noSpace - Cannot place new block at spawn position');
-        console.log('Next block type:', prev.nextBlockType);
-        console.log('Block position:', nextBlock.xy);
-        console.log('Board state:', newMatrix.slice(0, INVISIBLE_ROWS).map((row, i) => `Row ${i}: ${row.join('')}`).join('\n'));
-      } else if (isOver(newMatrix)) {
-        // 检查隐藏行是否被方块占据（标准失败条件）
+        // 检查是否是因为与可见区域的方块重叠
+        const { xy, shape } = nextBlock;
+        let hasVisibleCollision = false;
+
+        for (let k1 = 0; k1 < shape.length; k1++) {
+          for (let k2 = 0; k2 < shape[k1].length; k2++) {
+            const n = shape[k1][k2];
+            const row = xy[0] + k1;
+            const col = xy[1] + k2;
+
+            // 如果方块的某个单元格在可见区域（row >= INVISIBLE_ROWS）
+            // 且与已有方块重叠，则判定为游戏结束
+            if (n && row >= INVISIBLE_ROWS && row < BOARD_HEIGHT && col >= 0 && col < BOARD_WIDTH) {
+              if (newMatrix[row] && newMatrix[row][col]) {
+                hasVisibleCollision = true;
+                break;
+              }
+            }
+          }
+          if (hasVisibleCollision) break;
+        }
+
+        if (hasVisibleCollision) {
+          gameOverReason = 'noSpace';
+          gameOver = true;
+          console.log('[GAME OVER] noSpace - Cannot place new block in visible area');
+          console.log('Next block type:', prev.nextBlockType);
+          console.log('Block position:', nextBlock.xy);
+          console.log('Collision in visible area detected');
+        }
+      }
+
+      // 即使方块能够生成，也要检查隐藏行是否被占据
+      // 这是游戏结束的另一个标准条件
+      if (!gameOver && isOver(newMatrix)) {
         gameOverReason = 'topBlocked';
         gameOver = true;
         console.log('[GAME OVER] topBlocked - Invisible rows occupied');

@@ -16,5 +16,5 @@ export const ScoringModal = () => {
                 React.createElement(Text, null, t(language, 'levelUpInfo'))),
             React.createElement(Text, null, t(language, 'maxLevelInfo')),
             React.createElement(Box, { marginTop: 1 },
-                React.createElement(Text, { dimColor: true, color: "gray" }, "Press I to close")))));
+                React.createElement(Text, { dimColor: true, color: "gray" }, t(language, 'pressToClose'))))));
 };
