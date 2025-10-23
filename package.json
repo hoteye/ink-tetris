@@ -13,7 +13,8 @@
     "start": "npm run build && node dist/index.js",
     "dev": "tsc && node dist/index.js",
     "prepublishOnly": "npm run build",
-    "test": "npm run build && node tests/isOver.test.js"
+    "test": "npm run build && node tests/isOver.test.js",
+    "postuninstall": "node bin/uninstall.js"
   },
   "keywords": [
     "tetris",
