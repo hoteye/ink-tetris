@@ -6,6 +6,7 @@ import { GameBoard } from './components/GameBoard.js';
 import { NextBlock } from './components/NextBlock.js';
 import { GameInfo } from './components/GameInfo.js';
 import { Controls } from './components/Controls.js';
+import { ScoringModal } from './components/ScoringModal.js';
 import { I18nContext } from './i18n/I18nContext.js';
 import { Language, t } from './i18n/languages.js';
 import { loadConfig, saveConfig } from './utils/config.js';
@@ -18,6 +19,7 @@ const App: React.FC = () => {
   const { state, startGame, togglePause, moveBlock, hardDrop } = useGameState();
   const [language, setLanguage] = useState<Language>('en');
   const [isLoaded, setIsLoaded] = useState(false);
+  const [showScoringModal, setShowScoringModal] = useState(false);
 
   // 在应用启动时加载配置
   useEffect(() => {
@@ -39,6 +41,17 @@ const App: React.FC = () => {
 
   // 键盘控制
   useInput((input, key) => {
+    // 显示/隐藏积分规则
+    if (input === 'i' || input === 'I') {
+      setShowScoringModal((prev) => !prev);
+      return;
+    }
+
+    // 如果显示了积分规则，其他键无效
+    if (showScoringModal) {
+      return;
+    }
+
     // 切换语言
     if (input === 'l' || input === 'L') {
       setLanguage((prev) => {
@@ -145,6 +158,9 @@ const App: React.FC = () => {
             />
           </Box>
         </Box>
+
+        {/* 积分规则 Modal */}
+        {showScoringModal && <ScoringModal />}
       </Box>
     </I18nContext.Provider>
   );

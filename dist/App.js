@@ -6,6 +6,7 @@ import { GameBoard } from './components/GameBoard.js';
 import { NextBlock } from './components/NextBlock.js';
 import { GameInfo } from './components/GameInfo.js';
 import { Controls } from './components/Controls.js';
+import { ScoringModal } from './components/ScoringModal.js';
 import { I18nContext } from './i18n/I18nContext.js';
 import { t } from './i18n/languages.js';
 import { loadConfig, saveConfig } from './utils/config.js';
@@ -16,6 +17,7 @@ const App = () => {
     const { state, startGame, togglePause, moveBlock, hardDrop } = useGameState();
     const [language, setLanguage] = useState('en');
     const [isLoaded, setIsLoaded] = useState(false);
+    const [showScoringModal, setShowScoringModal] = useState(false);
     // 在应用启动时加载配置
     useEffect(() => {
         const config = loadConfig();
@@ -34,6 +36,15 @@ const App = () => {
     }, [language, isLoaded]);
     // 键盘控制
     useInput((input, key) => {
+        // 显示/隐藏积分规则
+        if (input === 'i' || input === 'I') {
+            setShowScoringModal((prev) => !prev);
+            return;
+        }
+        // 如果显示了积分规则，其他键无效
+        if (showScoringModal) {
+            return;
+        }
         // 切换语言
         if (input === 'l' || input === 'L') {
             setLanguage((prev) => {
@@ -107,6 +118,7 @@ const App = () => {
                         React.createElement(NextBlock, { nextBlockType: state.nextBlockType })),
                     React.createElement(GameInfo, { score: state.score, lines: state.lines, level: state.speedLevel, isPaused: state.isPaused })),
                 React.createElement(Box, null,
-                    React.createElement(Controls, { shouldBlink: !state.isStarted || state.isGameOver, isPaused: state.isPaused }))))));
+                    React.createElement(Controls, { shouldBlink: !state.isStarted || state.isGameOver, isPaused: state.isPaused }))),
+            showScoringModal && React.createElement(ScoringModal, null))));
 };
 export default App;
