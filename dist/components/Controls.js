@@ -21,7 +21,7 @@ export const Controls = ({ shouldBlink = false, isPaused = false }) => {
     // Controls 内容行数 = 标题 (1) + 控制说明 (11) = 12 行
     // 需要添加空行使总高度达到 18 行
     const GAMEBOARD_HEIGHT = VISIBLE_ROWS + 2; // 上下框各 1 行
-    const controlsContentLines = 13; // 标题 1 + 控制说明 11 + marginTop间隔 1
+    const controlsContentLines = 12; // 标题 1 + 控制说明 11
     const paddingNeeded = Math.max(0, GAMEBOARD_HEIGHT - controlsContentLines - 2); // -2 for padding borders
     return (React.createElement(Box, { flexDirection: "column", borderStyle: "round", borderColor: "blue", padding: 1, width: 24, height: GAMEBOARD_HEIGHT },
         React.createElement(Box, { marginBottom: 1 },
@@ -61,15 +61,14 @@ export const Controls = ({ shouldBlink = false, isPaused = false }) => {
                 React.createElement(Text, { color: "yellow" }, t(language, 'q')),
                 "   : ",
                 t(language, 'quit')),
-            React.createElement(Box, { marginTop: 1, flexDirection: "column" },
-                React.createElement(Text, { dimColor: true, wrap: "truncate" },
-                    React.createElement(Text, { color: "green" }, t(language, 'l')),
-                    "   : ",
-                    t(language, 'language')),
-                React.createElement(Text, { dimColor: true, wrap: "truncate" },
-                    React.createElement(Text, { color: "green" }, t(language, 'i')),
-                    "   : ",
-                    t(language, 'scoring'))),
+            React.createElement(Text, { dimColor: true, wrap: "truncate" },
+                React.createElement(Text, { color: "green" }, t(language, 'l')),
+                "   : ",
+                t(language, 'language')),
+            React.createElement(Text, { dimColor: true, wrap: "truncate" },
+                React.createElement(Text, { color: "green" }, t(language, 'i')),
+                "   : ",
+                t(language, 'scoring')),
             Array.from({ length: paddingNeeded }).map((_, i) => (React.createElement(Box, { key: `padding-${i}` },
                 React.createElement(Text, null, " ")))))));
 };
