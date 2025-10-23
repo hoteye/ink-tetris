@@ -110,6 +110,8 @@ const App = () => {
                 React.createElement(Text, { dimColor: true, color: "gray" },
                     "v",
                     version)),
+            !showScoringModal ? (
+            // 游戏模式
             React.createElement(Box, null,
                 React.createElement(Box, { marginRight: 2 },
                     React.createElement(GameBoard, { matrix: state.matrix, currentBlock: state.currentBlock, isGameOver: state.isGameOver })),
@@ -118,7 +120,8 @@ const App = () => {
                         React.createElement(NextBlock, { nextBlockType: state.nextBlockType })),
                     React.createElement(GameInfo, { score: state.score, lines: state.lines, level: state.speedLevel, isPaused: state.isPaused })),
                 React.createElement(Box, null,
-                    React.createElement(Controls, { shouldBlink: !state.isStarted || state.isGameOver, isPaused: state.isPaused }))),
-            showScoringModal && React.createElement(ScoringModal, null))));
+                    React.createElement(Controls, { shouldBlink: !state.isStarted || state.isGameOver, isPaused: state.isPaused })))) : (
+            // 积分规则模态框
+            React.createElement(ScoringModal, null)))));
 };
 export default App;

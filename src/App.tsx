@@ -127,40 +127,42 @@ const App: React.FC = () => {
           </Text>
         </Box>
 
-        {/* 游戏区域 */}
-        <Box>
-          {/* 游戏板 */}
-          <Box marginRight={2}>
-            <GameBoard matrix={state.matrix} currentBlock={state.currentBlock} isGameOver={state.isGameOver} />
-          </Box>
-
-          {/* 中间栏：Next 和 Info */}
-          <Box flexDirection="column" marginRight={2}>
-            {/* 下一个方块 */}
-            <Box marginBottom={1}>
-              <NextBlock nextBlockType={state.nextBlockType} />
+        {!showScoringModal ? (
+          // 游戏模式
+          <Box>
+            {/* 游戏板 */}
+            <Box marginRight={2}>
+              <GameBoard matrix={state.matrix} currentBlock={state.currentBlock} isGameOver={state.isGameOver} />
             </Box>
 
-            {/* 游戏信息 */}
-            <GameInfo
-              score={state.score}
-              lines={state.lines}
-              level={state.speedLevel}
-              isPaused={state.isPaused}
-            />
-          </Box>
+            {/* 中间栏：Next 和 Info */}
+            <Box flexDirection="column" marginRight={2}>
+              {/* 下一个方块 */}
+              <Box marginBottom={1}>
+                <NextBlock nextBlockType={state.nextBlockType} />
+              </Box>
 
-          {/* 最右侧：控制说明 */}
-          <Box>
-            <Controls
-              shouldBlink={!state.isStarted || state.isGameOver}
-              isPaused={state.isPaused}
-            />
-          </Box>
-        </Box>
+              {/* 游戏信息 */}
+              <GameInfo
+                score={state.score}
+                lines={state.lines}
+                level={state.speedLevel}
+                isPaused={state.isPaused}
+              />
+            </Box>
 
-        {/* 积分规则 Modal */}
-        {showScoringModal && <ScoringModal />}
+            {/* 最右侧：控制说明 */}
+            <Box>
+              <Controls
+                shouldBlink={!state.isStarted || state.isGameOver}
+                isPaused={state.isPaused}
+              />
+            </Box>
+          </Box>
+        ) : (
+          // 积分规则模态框
+          <ScoringModal />
+        )}
       </Box>
     </I18nContext.Provider>
   );
