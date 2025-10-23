@@ -35,11 +35,29 @@ function run() {
     assert.equal(isOver(updated), true, 'blocks in spawn row 0 should trigger game over');
   }
 
-  // 在最后一个隐藏行放置方块也应判负
+  // 在最后一个隐藏行（行3）放置方块不应判负
+  // 新逻辑：只有前半部分（行0-1）有方块才判负
   {
     const matrix = createEmptyMatrix();
     const updated = setCell(matrix, INVISIBLE_ROWS - 1, BOARD_WIDTH - 1);
-    assert.equal(isOver(updated), true, 'blocks in the last invisible row should trigger game over');
+    assert.equal(isOver(updated), false, 'blocks in the last invisible row (row 3) should not trigger game over');
+  }
+
+  // 在第1行放置方块应判负
+  {
+    const matrix = createEmptyMatrix();
+    const updated = setCell(matrix, 1, 0);
+    assert.equal(isOver(updated), true, 'blocks in row 1 should trigger game over');
+  }
+
+  // 在行2-3放置方块不应判负（这是bug修复的关键）
+  {
+    const matrix = createEmptyMatrix();
+    let updated = setCell(matrix, 2, 4);
+    updated = setCell(updated, 2, 5);
+    updated = setCell(updated, 3, 4);
+    updated = setCell(updated, 3, 5);
+    assert.equal(isOver(updated), false, 'blocks in rows 2-3 should not trigger game over');
   }
 
   // 即使可见区满了，只要隐藏行为空就应继续游戏

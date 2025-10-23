@@ -60,9 +60,16 @@ export function isClear(matrix: Matrix): number[] | false {
   return clearLines.length === 0 ? false : clearLines;
 }
 
-// 检查游戏是否结束 (生成区被方块占据)
+// 检查游戏是否结束
+// 标准俄罗斯方块规则：方块锁定后，如果堆积到了生成区域的上半部分
+// （即不可见区域的前2行），则判定游戏结束
+//
+// 不可见区域有4行（0-3），我们允许方块在后半部分（行2-3）暂时存在
+// 但如果堆积到前半部分（行0-1），说明已经接近顶部，游戏结束
 export function isOver(matrix: Matrix): boolean {
-  for (let y = 0; y < INVISIBLE_ROWS; y++) {
+  // 检查不可见区域的前2行（行0-1）是否有方块
+  const topRows = Math.floor(INVISIBLE_ROWS / 2);
+  for (let y = 0; y < topRows; y++) {
     if (matrix[y].some((cell) => !!cell)) {
       return true;
     }
