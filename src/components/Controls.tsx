@@ -75,14 +75,14 @@ export const Controls: React.FC<ControlsProps> = ({ shouldBlink = false, isPause
         <Text dimColor wrap="truncate">
           <Text color="yellow">{t(language, 'q')}</Text>   : {t(language, 'quit')}
         </Text>
-        <Box marginTop={1}>
+        <Box marginTop={1} flexDirection="column">
           <Text dimColor wrap="truncate">
             <Text color="green">{t(language, 'l')}</Text>   : {t(language, 'language')}
           </Text>
+          <Text dimColor wrap="truncate">
+            <Text color="green">{t(language, 'i')}</Text>   : {t(language, 'scoring')}
+          </Text>
         </Box>
-        <Text dimColor wrap="truncate">
-          <Text color="green">{t(language, 'i')}</Text>   : {t(language, 'scoring')}
-        </Text>
 
         {/* 填充空行以匹配 GameBoard 高度 */}
         {Array.from({ length: paddingNeeded }).map((_, i) => (
