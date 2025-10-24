@@ -27,7 +27,7 @@ export function want(block: Block, matrix: Matrix): boolean {
         return false;
       }
 
-      // 检查上边界 (允许在屏幕上方)
+      // 检查上边界 (react-tetris 风格: y < 0 的部分不检查碰撞，直接跳过)
       if (xy[0] + k1 < 0) {
         continue;
       }
@@ -37,7 +37,7 @@ export function want(block: Block, matrix: Matrix): boolean {
         return false;
       }
 
-      // 检查是否与已有方块重叠
+      // 检查是否与已有方块重叠（只对 y >= 0 的部分检查）
       if (n && matrix[xy[0] + k1][xy[1] + k2]) {
         return false;
       }
@@ -61,20 +61,10 @@ export function isClear(matrix: Matrix): number[] | false {
 }
 
 // 检查游戏是否结束
-// 标准俄罗斯方块规则：方块锁定后，如果堆积到了生成区域的上半部分
-// （即不可见区域的前2行），则判定游戏结束
-//
-// 不可见区域有4行（0-3），我们允许方块在后半部分（行2-3）暂时存在
-// 但如果堆积到前半部分（行0-1），说明已经接近顶部，游戏结束
+// react-tetris 风格：只检查第0行（棋盘顶部）是否有方块
+// 因为方块在 y < 0 时不会写入 matrix，所以 matrix[0] 有方块意味着已经堆到顶了
 export function isOver(matrix: Matrix): boolean {
-  // 检查不可见区域的前2行（行0-1）是否有方块
-  const topRows = Math.floor(INVISIBLE_ROWS / 2);
-  for (let y = 0; y < topRows; y++) {
-    if (matrix[y].some((cell) => !!cell)) {
-      return true;
-    }
-  }
-  return false;
+  return matrix[0].some((cell) => !!cell);
 }
 
 // 将方块合并到矩阵

@@ -63,120 +63,120 @@ function run() {
     console.log('✓ Test 1: Empty board allows block spawn');
   }
 
-  // 测试2：不可见区域有方块，但新方块生成位置不在可见区域发生碰撞 - 应该继续游戏
-  // 这是修复的核心场景：当方块在位置[2,4]（不可见区）时，新O方块也生成在[2,4]
+  // 测试2：react-tetris 风格：方块在负数行号生成，y < 0 时不检查碰撞
+  // O 方块现在在 [-1, 4] 生成，占据 y=-1 到 y=0 的区域
   {
     const matrix = createEmptyMatrix();
-    // 在不可见区域放置方块（模拟O方块锁定在[2,4]）
-    const updated = setCell(setCell(matrix, 2, 4), 2, 5);
-    const updated2 = setCell(setCell(updated, 3, 4), 3, 5);
+    // 在第0行放置方块
+    const updated = setCell(setCell(matrix, 0, 4), 0, 5);
 
-    // 尝试生成新的O方块（默认位置[2,4]）
+    // 尝试生成新的O方块（默认位置[-1,4]，占据y=-1到y=0）
     const block = new Block({ type: 'O' });
 
-    // want()会返回false，因为位置被占据
-    assert.equal(want(block, updated2), false, 'Block cannot spawn at occupied position');
+    // want()会检查y=0的部分，发现碰撞，返回false
+    assert.equal(want(block, updated), false, 'Block at [-1,4] collides with row 0');
 
-    // 但是碰撞发生在不可见区域，所以不应该判定游戏结束
-    assert.equal(hasVisibleCollision(block, updated2), false, 'Collision in invisible area should not trigger game over');
+    // 碰撞发生在y=0（matrix[0]），不在可见区域
+    assert.equal(hasVisibleCollision(block, updated), false, 'Collision at row 0 is not in visible area');
 
-    console.log('✓ Test 2: Collision in invisible area does not trigger game over');
+    console.log('✓ Test 2: Block spawn collision at row 0 (invisible)');
   }
 
-  // 测试3：可见区域有方块，新方块与可见区域方块碰撞 - 应该游戏结束
+  // 测试3：可见区域有方块，新方块在 y < 0 生成不碰撞
   {
     const matrix = createEmptyMatrix();
-    // 在可见区域顶部放置方块（第4行是第一个可见行）
+    // 填满第一个可见行（第4行）
     let updated = matrix;
-    // O方块占据2x2，在[2,4]生成时会占据行2-3，列4-5
-    // 如果第4-5行有方块，O方块下落后会碰撞
     for (let x = 0; x < BOARD_WIDTH; x++) {
-      updated = setCell(updated, INVISIBLE_ROWS, x);  // 填满第一个可见行
+      updated = setCell(updated, INVISIBLE_ROWS, x);
     }
 
-    // 尝试生成新的I方块（位置[3,3]）
+    // react-tetris 风格：I 方块现在在 [0,3] 生成（而不是 [3,3]）
     const block = new Block({ type: 'I' });
 
-    // I方块是1x4，在[3,3]生成，占据第3行的列3-6
-    // 因为第4行已满，I方块无法向下移动
-    // 但是I方块本身在第3行（不可见区），与第4行不直接碰撞
-    assert.equal(hasVisibleCollision(block, updated), false, 'I block at row 3 does not collide with row 4');
+    // I方块是1x4，在[0,3]生成，占据第0行的列3-6
+    // 第4行虽满，但I方块在y=0，不与第4行碰撞
+    assert.equal(hasVisibleCollision(block, updated), false, 'I block at row 0 does not collide with row 4');
 
-    console.log('✓ Test 3: Block in invisible area, visible area full but no direct collision');
+    console.log('✓ Test 3: Block at row 0, visible area full but no collision');
   }
 
-  // 测试4：新方块部分在可见区域，与可见区域方块碰撞 - 应该游戏结束
+  // 测试4：T方块在 [-1,4] 生成，与第0行碰撞
   {
     const matrix = createEmptyMatrix();
-    // T方块在[2,4]生成时的形状：
-    //   row 2: [0,1,0]
-    //   row 3: [1,1,1]
-    // 占据位置：row 2 col 5; row 3 col 4,5,6
+    // react-tetris 风格：T方块在[-1,4]生成时的形状：
+    //   row -1: [0,1,0] (cols 4,5,6)
+    //   row 0:  [1,1,1] (cols 4,5,6)
 
-    // 在row 3, col 4 放置方块（在不可见区域）
-    const updated = setCell(matrix, 3, 4);
+    // 在row 0, col 5 放置方块
+    const updated = setCell(matrix, 0, 5);
 
     const block = new Block({ type: 'T' });
 
-    // T方块无法放置，因为[3,4]已被占据
+    // T方块无法放置，因为[0,5]已被占据
     assert.equal(want(block, updated), false, 'T block cannot spawn');
 
-    // 但碰撞在不可见区域，不应该游戏结束
-    assert.equal(hasVisibleCollision(block, updated), false, 'Collision at row 3 (invisible) should not trigger game over');
+    // 碰撞在不可见区域（row 0），不应该游戏结束
+    assert.equal(hasVisibleCollision(block, updated), false, 'Collision at row 0 (invisible) should not trigger game over');
 
-    console.log('✓ Test 4: T block collision in invisible area');
+    console.log('✓ Test 4: T block collision at row 0 (invisible)');
   }
 
-  // 测试5：模拟真实游戏场景 - 方块堆积到可见区域，新方块部分在可见区
+  // 测试5：L方块下落到可见区域与方块碰撞
   {
     const matrix = createEmptyMatrix();
-    // 创建一个更低位置的方块，让它的一部分在可见区域
-    // L方块占据2行3列，如果在[3,4]生成：
+    // L方块在下落过程中，如果在[3,4]位置：
     //   row 3: [0,0,1] (cols 4,5,6)
     //   row 4: [1,1,1] (cols 4,5,6)
     // 在第4行的列4放置方块，会与L方块的可见部分碰撞
     let updated = matrix;
     updated = setCell(updated, 4, 4);
 
+    // 模拟L方块已经下落到位置[3,4]
     const block = new Block({ type: 'L', xy: [3, 4] });
 
-    assert.equal(want(block, updated), false, 'L block at [3,4] cannot spawn');
-    assert.equal(hasVisibleCollision(block, updated), true, 'Collision with visible area should trigger game over');
+    assert.equal(want(block, updated), false, 'L block at [3,4] collides');
+    assert.equal(hasVisibleCollision(block, updated), true, 'Collision with visible area (row 4)');
 
-    console.log('✓ Test 5: Block collision with visible area triggers game over');
+    console.log('✓ Test 5: Block collision with visible area');
   }
 
-  // 测试6：边界情况 - 第3行（最后一个不可见行）有方块
+  // 测试6：react-tetris 风格 - 第1-3行有方块不影响生成
   {
     const matrix = createEmptyMatrix();
-    // 在第3行放置方块
-    const updated = setCell(setCell(matrix, 3, 4), 3, 5);
+    // 在第1-3行放置方块（但不在第0行）
+    let updated = matrix;
+    updated = setCell(setCell(updated, 1, 4), 1, 5);
+    updated = setCell(setCell(updated, 2, 4), 2, 5);
+    updated = setCell(setCell(updated, 3, 4), 3, 5);
 
+    // O方块在[-1,4]生成，占据y=-1到y=0
+    // y=-1 部分不检查碰撞，y=0部分没有方块，可以生成
     const block = new Block({ type: 'O' });
 
-    assert.equal(want(block, updated), false, 'Block spawn blocked');
-    assert.equal(hasVisibleCollision(block, updated), false, 'Row 3 is still invisible');
+    assert.equal(want(block, updated), true, 'Block can spawn at [-1,4]');
+    assert.equal(hasVisibleCollision(block, updated), false, 'No collision in visible area');
 
-    console.log('✓ Test 6: Block at last invisible row (row 3) does not trigger game over');
+    console.log('✓ Test 6: Blocks in rows 1-3 do not block spawn at [-1,4]');
   }
 
-  // 测试7：边界情况 - 第4行（第一个可见行）有方块
+  // 测试7：第4行（第一个可见行）有方块
   {
     const matrix = createEmptyMatrix();
     // 在第4行放置方块（第一个可见行）
     const updated = setCell(setCell(matrix, 4, 4), 4, 5);
 
+    // O方块在[-1,4]生成，占据y=-1到y=0
+    // 第4行的方块不影响生成
     const block = new Block({ type: 'O' });
-    // O方块在[2,4]生成，占据[2-3][4-5]
-    // 第4行的[4,5]位置有方块，但O方块只占据到第3行
 
     assert.equal(want(block, updated), true, 'Block can spawn, no overlap with row 4');
-    assert.equal(hasVisibleCollision(block, updated), false, 'O block at [2,4] does not reach row 4');
+    assert.equal(hasVisibleCollision(block, updated), false, 'O block at [-1,4] does not reach row 4');
 
     console.log('✓ Test 7: Block can spawn above visible area blocks');
   }
 
-  // 测试8：实际失败场景 - 方块直接在可见区域无法放置
+  // 测试8：实际失败场景 - 方块在可见区域碰撞
   {
     const matrix = createEmptyMatrix();
     // 在第4-5行放置方块
@@ -184,23 +184,25 @@ function run() {
     updated = setCell(setCell(updated, 4, 4), 4, 5);
     updated = setCell(setCell(updated, 5, 4), 5, 5);
 
-    // 创建一个位置更低的方块（模拟已经下落的方块）
+    // 创建一个位置更低的方块（模拟已经下落到可见区域的方块）
     const block = new Block({
       type: 'O',
-      xy: [4, 4]  // 强制在可见区域生成
+      xy: [4, 4]  // 在可见区域位置
     });
 
-    assert.equal(want(block, updated), false, 'Block cannot be placed in visible area');
+    assert.equal(want(block, updated), false, 'Block cannot be placed at [4,4]');
     assert.equal(hasVisibleCollision(block, updated), true, 'Direct collision in visible area');
 
-    console.log('✓ Test 8: Direct collision in visible area triggers game over');
+    console.log('✓ Test 8: Direct collision in visible area');
   }
 
   console.log('\n✅ All game over logic tests passed!\n');
-  console.log('Summary:');
-  console.log('- Blocks can spawn even if invisible area has blocks');
-  console.log('- Game over only triggers when new block collides with visible area (row >= 4)');
-  console.log('- Invisible rows (0-3) are for spawning and transitioning blocks');
+  console.log('Summary (react-tetris style):');
+  console.log('- Blocks spawn at negative y positions (I: [0,3], others: [-1,4])');
+  console.log('- y < 0 positions do not check collision (want() returns true)');
+  console.log('- Only y >= 0 parts are written to matrix');
+  console.log('- Game over only when matrix[0] has blocks (isOver() checks row 0 only)');
+  console.log('- Visible area starts at row 4 (INVISIBLE_ROWS = 4)');
 }
 
 run();

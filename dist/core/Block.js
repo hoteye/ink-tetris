@@ -1,4 +1,4 @@
-import { blockShape, origin, INVISIBLE_ROWS } from './constants.js';
+import { blockShape, origin } from './constants.js';
 export class Block {
     constructor(option) {
         this.type = option.type;
@@ -15,13 +15,14 @@ export class Block {
             this.xy = option.xy;
         }
         else {
-            // 初始位置 (在不可见区域顶部生成)
+            // 初始位置 (使用负数行号表示在棋盘上方的 spawn zone)
+            // react-tetris 风格：I块在[0,3]，其他块在[-1,4]
             switch (option.type) {
                 case 'I':
-                    this.xy = [INVISIBLE_ROWS - 1, 3];
+                    this.xy = [0, 3];
                     break;
                 default:
-                    this.xy = [INVISIBLE_ROWS - 2, 4];
+                    this.xy = [-1, 4];
                     break;
             }
         }
